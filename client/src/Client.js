@@ -18,9 +18,16 @@ function checkStatus(response) {
   }
 }
 
+function newGame() {
+  return fetch(`/api/new`, {
+    accept: 'application/json'
+  }).then(checkStatus)
+    .then(parseJSON);
+}
+
 function parseJSON(response) {
   return response.json();
 }
 
-const Client = { search };
+const Client = { search, newGame };
 export default Client;
