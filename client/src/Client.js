@@ -1,10 +1,23 @@
 
-function search(query) {
-  return fetch(`/api/food?q=${query}`, {
-    accept: 'application/json',
+function newGame() {
+  return fetch(`/api/new`, {
+    accept: 'application/json'
   }).then(checkStatus)
     .then(parseJSON);
 }
+
+function guess(id, letter) {
+  return fetch("/api/guess", {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: "POST",
+      body: JSON.stringify({ id, letter })
+  }).then(checkStatus)
+    .then(parseJSON);
+}
+
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -18,16 +31,9 @@ function checkStatus(response) {
   }
 }
 
-function newGame() {
-  return fetch(`/api/new`, {
-    accept: 'application/json'
-  }).then(checkStatus)
-    .then(parseJSON);
-}
-
 function parseJSON(response) {
   return response.json();
 }
 
-const Client = { search, newGame };
+const Client = { newGame, guess };
 export default Client;

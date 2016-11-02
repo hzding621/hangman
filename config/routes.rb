@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  scope '/api' do
-    get :new, to: 'games#new'
-  end
+  get '/api/new' => 'games#new'
+  post '/api/guess' => 'games#guess'
 end

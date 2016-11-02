@@ -1,47 +1,44 @@
 import React, { Component } from 'react';
-import SearchFood from './component/food/SearchFood';
-import SelectedFood from './component/food/SelectedFood';
+import Client from './Client';
+import Game from './Game';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      selectedFoods: [],
-    };
-  }
-  render() {
-    return (
-      <div className='App'>
-        <div className='ui text container'>
-          <SelectedFood
-            foods={this.state.selectedFoods}
-            onFoodRemove={
-              (idx) => (
-                this.setState({
-                  selectedFoods: [
-                    ...this.state.selectedFoods.slice(0, idx),
-                    ...this.state.selectedFoods.slice(
-                      idx + 1, this.state.selectedFoods.length
-                    ),
-                  ],
-                })
-              )
-            }
-          />
-          <SearchFood
-            onFoodSelect={
-              (food) => (
-                this.setState({
-                  selectedFoods: this.state.selectedFoods.concat(food),
-                })
-              )
-            }
-          />
-        </div>
-      </div>
-    );
-  }
+        this.state = {
+            game: null
+        };
+
+        this.onNewGame = this.onNewGame.bind(this);
+        this.guessRequest = this.guessRequest.bind(this);
+    }
+
+    onNewGame() {
+        Client.newGame().then((game) => {
+            this.setState({ game });
+        });
+    }
+
+    guessRequest(key, letter) {
+        Client.guess(key, letter)
+            .then((game) => {
+                this.setState({ game })
+            });
+    }
+
+    render() {
+        return (
+            <div style={{textAlign: "center"}}>
+                <h1>HangMan</h1>
+                {this.state.game
+                    ? <div></div>
+                    : <button onClick={this.onNewGame}>New Game</button>
+                }
+                <Game game={this.state.game} guessRequest={this.guessRequest} />
+            </div>
+        );
+    }
 }
 
 export default App;

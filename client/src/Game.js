@@ -1,5 +1,4 @@
 import React from 'react';
-import Client from './Client'
 
 class Game extends React.Component {
     constructor(props) {
@@ -8,37 +7,32 @@ class Game extends React.Component {
             guess: ''
         };
         this.handleGuessChange = this.handleGuessChange.bind(this);
-        this.onClickTest = this.onClickTest.bind(this);
     }
 
     handleGuessChange(event) {
         this.setState({guess: event.target.value});
     }
 
-    onClickTest() {
-        Client.newGame().then((json) => console.log(json));
-    }
-
     render() {
+        if (!this.props.game) {
+            // Game is not loaded
+            return (<div></div>);
+        }
+        const {id, phrase, state, lives} = this.props.game;
         return (
             <div style={{textAlign: "center"}}>
-                <h1>HangMan</h1>
-                <h2>{this.props.phrase}</h2>
-                <div>Status: {this.props.state} Number of lives left: {this.props.lives} </div>
+                <h2>{phrase}</h2>
+                <div>Status: {state} Number of lives left: {lives} </div>
                 <p/>
                 <input type="text" value={this.state.guess} onChange={this.handleGuessChange}/>
-                <input type="submit" value="guess" onClick={() => this.props.guessRequest(this.state.guess)}/>
-                <button onClick={this.onClickTest}>test</button>
+                <input type="submit" value="guess" onClick={() => this.props.guessRequest(id, this.state.guess)}/>
             </div>
         )
     }
 }
 
 Game.PropTypes = {
-    gameKey: React.PropTypes.string,
-    phrase: React.PropTypes.string,
-    state: React.PropTypes.string,
-    lives: React.PropTypes.number,
+    game: React.PropTypes.object,
     guessRequest: React.PropTypes.func
 };
 
