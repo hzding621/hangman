@@ -21,9 +21,14 @@ class App extends Component {
     }
 
     guessRequest(key, letter) {
+        letter = letter.toLowerCase();
+        if (letter.length !== 1 || letter[0] < 'a' || letter[0] > 'z') {
+            return;
+        }
         Client.guess(key, letter)
             .then((game) => {
-                this.setState({ game })
+                this.setState({ game });
+                console.log(game)
             });
     }
 
@@ -35,7 +40,7 @@ class App extends Component {
                     ? <div></div>
                     : <button onClick={this.onNewGame}>New Game</button>
                 }
-                <Game game={this.state.game} guessRequest={this.guessRequest} />
+                <Game game={this.state.game} guessRequest={this.guessRequest} onNewGame={this.onNewGame} />
             </div>
         );
     }

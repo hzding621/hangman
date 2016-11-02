@@ -23,6 +23,7 @@ class GamesController < ApplicationController
 
     unless check_guess?(letter) && !id.blank?
       render status: 400, json: {error: 'Expected guessing a single english character'}
+      return
     end
 
     game = Game.find(id)
@@ -34,9 +35,11 @@ class GamesController < ApplicationController
         current[index] = letter
       end
     }
-    state = if lives > 0
-              'alive'
-            else answer == current ? 'won' : 'lost' end
+    state = if answer == current
+              'won'
+            else
+              lives > 0 ? 'alive' : 'lost'
+            end
     game.update(lives: lives, current: current)
     render(
         status: 200,
