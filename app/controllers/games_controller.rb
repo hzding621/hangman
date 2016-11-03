@@ -32,7 +32,7 @@ class GamesController < ApplicationController
     end
 
     game = Game.find(id)
-    current = game[:current]
+    current = game[:current] # partially guessed word
     answer = game[:answer]
     lives = game[:lives]
 
