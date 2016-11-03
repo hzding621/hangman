@@ -1,5 +1,5 @@
 import React from 'react';
-import css from './Game.css'
+import css from './Game.css' // eslint-disable-line
 
 class Game extends React.Component {
     constructor(props) {

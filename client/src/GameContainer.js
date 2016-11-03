@@ -27,7 +27,7 @@ class GameContainer extends Component {
             return;
         }
         if (this.state.trials.includes(letter)) {
-            this.setState({ message: `Already tried ${letter}`});
+            this.setState({ message: `Already tried letter ${letter}`});
             return;
         }
         Controllers.guess(key, letter)
