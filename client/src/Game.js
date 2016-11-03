@@ -49,6 +49,7 @@ class Game extends React.Component {
                         <div>Number of lives left: {lives} </div>
                         <div>Trials: {this.props.trials}</div>
                         <br />
+                        <div>Enter one letter:</div>
                         <input type="text" value={this.state.input} onChange={this.onInputChange}/>
                         <input type="submit" value="guess" onClick={this.onSubmit}/>
                         <div className="red">{this.props.message}</div>
