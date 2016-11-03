@@ -1,16 +1,17 @@
 class GamesController < ApplicationController
   def new
-    picked_word = Word.all.sample[:value]
+    picked_word = Word.order("RANDOM()").limit(1)[0][:value]
     new_game = Game.create!({
         :answer => picked_word,
         :current => '_' * picked_word.length,
-        :lives => 7
+        :lives => 10
                  })
     render(
         status: 200,
         json: {
             :id => new_game[:id],
             :phrase => new_game[:current],
+            :answer => new_game[:answer],
             :lives => new_game[:lives],
             :state => 'alive'
         }
@@ -29,12 +30,15 @@ class GamesController < ApplicationController
     game = Game.find(id)
     current = game[:current]
     answer = game[:answer]
-    lives = game[:lives] - 1
+    lives = game[:lives]
+    matched = false
     current.each_char.with_index { |_, index|
       if current[index] == '_' && answer[index] == letter
         current[index] = letter
+        matched = true
       end
     }
+    lives -= 1 unless matched
     state = if answer == current
               'won'
             else
@@ -46,6 +50,7 @@ class GamesController < ApplicationController
         json: {
             :id => id,
             :phrase => current,
+            :answer => answer,
             :lives => lives,
             :state => state
         }

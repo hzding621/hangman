@@ -21,14 +21,9 @@ class App extends Component {
     }
 
     guessRequest(key, letter) {
-        letter = letter.toLowerCase();
-        if (letter.length !== 1 || letter[0] < 'a' || letter[0] > 'z') {
-            return;
-        }
         Client.guess(key, letter)
             .then((game) => {
                 this.setState({ game });
-                console.log(game)
             });
     }
 
