@@ -5,7 +5,9 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = { input: ''};
-        this.handleGuessChange = this.handleGuessChange.bind(this);
+
+        // Event handlers
+        this.onInputChange = this.onInputChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -15,17 +17,19 @@ class Game extends React.Component {
     }
 
     // Bind text input value to React state
-    handleGuessChange(event) {
+    onInputChange(event) {
         this.setState({input: event.target.value});
     }
 
+    // Event handler for 'Guess' button
     onSubmit() {
         const {id} = this.props.game;
-        this.props.guessRequest(id, this.state.input);
+        this.props.submitGuess(id, this.state.input);
     }
+
     render() {
         if (!this.props.game) {
-            // When the game is not initialize, only show the New Game button
+            // When the game is not initialized, only show the New Game button
             return (
                 <div className="body">
                     <h1>HangMan</h1>
@@ -45,7 +49,7 @@ class Game extends React.Component {
                         <div>Number of lives left: {lives} </div>
                         <div>Trials: {this.props.trials}</div>
                         <br />
-                        <input type="text" value={this.state.input} onChange={this.handleGuessChange}/>
+                        <input type="text" value={this.state.input} onChange={this.onInputChange}/>
                         <input type="submit" value="guess" onClick={this.onSubmit}/>
                         <div className="red">{this.props.message}</div>
                     </div>
@@ -64,10 +68,11 @@ class Game extends React.Component {
     }
 }
 
+// Provide type checks for props
 Game.PropTypes = {
     game: React.PropTypes.object,
     trials: React.PropTypes.arrayOf(React.PropTypes.string),
-    guessRequest: React.PropTypes.func,
+    submitGuess: React.PropTypes.func,
     onNewGame: React.PropTypes.func,
     message: React.PropTypes.string
 };

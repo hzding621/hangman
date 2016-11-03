@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import Controllers from './Controllers';
 import Game from './Game';
 
+// State container for the entire game, delegate presentation to Game component
 class GameContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            game: null,
-            trials: [],
-            message: ""
+            game: null, // contains game progress metadata
+            trials: [], // stores the previously guessed letters in this game
+            message: "" // alert message
         };
 
         this.onNewGame = this.onNewGame.bind(this);
-        this.guessRequest = this.guessRequest.bind(this);
+        this.submitGuess = this.submitGuess.bind(this);
     }
 
     onNewGame() {
@@ -22,8 +23,9 @@ class GameContainer extends Component {
         });
     }
 
-    guessRequest(key, letter) {
+    submitGuess(key, letter) {
         if (!GameContainer.validateGuess(letter)) {
+            this.setState({ message: 'Please type in exactly one English letter..'});
             return;
         }
         if (this.state.trials.includes(letter)) {
@@ -47,7 +49,7 @@ class GameContainer extends Component {
     render() {
         return (<Game game={this.state.game}
                       trials={this.state.trials}
-                      guessRequest={this.guessRequest}
+                      submitGuess={this.submitGuess}
                       onNewGame={this.onNewGame}
                       message={this.state.message}/>
         );

@@ -75,4 +75,18 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert response['lives'] == 6
     assert response['state'] == 'won'
   end
+
+  test 'when new request send to finished game return error' do
+    game = Game.create!({
+                            :answer => 'test',
+                            :current => '____',
+                            :lives => 0
+                        })
+
+    id = game[:id]
+    post '/api/guess', params: {letter: 'a', id: id}
+    response = JSON.parse(@response.body)
+
+    assert response.key?('error')
+  end
 end

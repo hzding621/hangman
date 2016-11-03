@@ -14,7 +14,6 @@ class GamesController < ApplicationController
         json: {
             :id => new_game[:id],
             :phrase => new_game[:current],
-            :answer => new_game[:answer],
             :lives => new_game[:lives],
             :state => 'alive'
         }
@@ -55,16 +54,17 @@ class GamesController < ApplicationController
 
     state = if answer == current then 'won' else lives > 0 ? 'alive' : 'lost' end
     game.update(lives: lives, current: current)
-    render(
-        status: 200,
-        json: {
-            :id => id,
-            :phrase => current,
-            :answer => answer,
-            :lives => lives,
-            :state => state
-        }
-    )
+    response_data = {
+        :id => id,
+        :phrase => current,
+        :lives => lives,
+        :state => state
+    }
+    unless state == 'alive'
+      # does not return answer unless game is lost
+      response_data[:answer] = answer
+    end
+    render status: 200, json: response_data
   end
 
   private
