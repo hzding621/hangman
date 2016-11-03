@@ -37,6 +37,12 @@ class GamesController < ApplicationController
     answer = game[:answer]
     lives = game[:lives]
 
+    # Safe check requesting to a finished game
+    if lives == 0
+      render status: 400, json: {error: 'Game has already ended!'}
+      return
+    end
+
     # Loop through the word and find matched letters
     matched = false
     current.each_char.with_index { |_, index|
