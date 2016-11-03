@@ -1,61 +1,59 @@
 import React from 'react';
+import css from './Game.css'
 
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { guess: '', trials: [] };
+        this.state = { input: ''};
         this.handleGuessChange = this.handleGuessChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    // Clear text input upon view update
     componentWillReceiveProps(nextProps) {
-        if (nextProps.game && this.props.game && this.props.game.id !== nextProps.game.id) {
-            this.setState({ trials: [] });
-        }
+        this.setState({ input: '' })
     }
 
+    // Bind text input value to React state
     handleGuessChange(event) {
-        this.setState({guess: event.target.value});
-    }
-
-    static validateGuess(letter) {
-        letter = letter.toLowerCase();
-        return (letter.length === 1 && letter[0] >= 'a' && letter[0] <= 'z');
+        this.setState({input: event.target.value});
     }
 
     onSubmit() {
-        if (Game.validateGuess(this.state.guess)) {
-            const {id} = this.props.game;
-            const trials = this.state.trials;
-            trials.push(this.state.guess);
-            this.setState({ trials });
-            this.props.guessRequest(id, this.state.guess);
-        }
+        const {id} = this.props.game;
+        this.props.guessRequest(id, this.state.input);
     }
     render() {
         if (!this.props.game) {
-            // Game is not loaded
-            return (<div></div>);
+            // When the game is not initialize, only show the New Game button
+            return (
+                <div className="body">
+                    <h1>HangMan</h1>
+                    <button onClick={this.props.onNewGame}>New Game</button>
+                </div>
+            );
         }
         const {phrase, answer, state, lives} = this.props.game;
         return (
-            <div style={{textAlign: "center"}}>
-                <h2 style={{fontFamily: "Ubuntu Mono"}}>{phrase}</h2>
+            <div className="body">
+                <h1>HangMan</h1>
+                <h2 className="phrase">{phrase}</h2>
                 {
                     state === 'alive'
                     ? <div>
                         <div>Status: {state}</div>
                         <div>Number of lives left: {lives} </div>
-                        <div>Trials: {this.state.trials}</div>
+                        <div>Trials: {this.props.trials}</div>
                         <br />
-                        <input type="text" value={this.state.guess} onChange={this.handleGuessChange}/>
+                        <input type="text" value={this.state.input} onChange={this.handleGuessChange}/>
                         <input type="submit" value="guess" onClick={this.onSubmit}/>
+                        <div className="red">{this.props.message}</div>
                     </div>
                     : <div>
                         {
                             state === 'won'
                             ? <div>Congratulations! You found the answer</div>
-                            : <div>The answer is <span style={{color: 'red'}}>{answer}</span>. Try again...</div>
+                            : <div>The answer is <span className="red">{answer}</span>. Try again...</div>
                         }
                         <br />
                         <button onClick={this.props.onNewGame}>New Game</button>
@@ -68,8 +66,10 @@ class Game extends React.Component {
 
 Game.PropTypes = {
     game: React.PropTypes.object,
+    trials: React.PropTypes.arrayOf(React.PropTypes.string),
     guessRequest: React.PropTypes.func,
-    onNewGame: React.PropTypes.func
+    onNewGame: React.PropTypes.func,
+    message: React.PropTypes.string
 };
 
 export default Game;

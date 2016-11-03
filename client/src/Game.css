@@ -1,0 +1,12 @@
+.phrase {
+    font-family: "Ubuntu Mono", serif;
+    letter-spacing: 1px;
+}
+
+.body {
+    text-align: center;
+}
+
+.red {
+    color: red;
+}

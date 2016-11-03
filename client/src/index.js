@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
+import App from './GameContainer';
 import './semantic-ui/semantic.min.css';
 
 ReactDOM.render(

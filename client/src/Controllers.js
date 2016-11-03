@@ -35,5 +35,5 @@ function parseJSON(response) {
   return response.json();
 }
 
-const Client = { newGame, guess };
-export default Client;
+const Controllers = { newGame, guess };
+export default Controllers;

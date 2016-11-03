@@ -1,11 +1,14 @@
 class GamesController < ApplicationController
+
+  # Create a new game and return metadata
   def new
+    # Randomly pick one word from dictionary
     picked_word = Word.order("RANDOM()").limit(1)[0][:value]
     new_game = Game.create!({
-        :answer => picked_word,
-        :current => '_' * picked_word.length,
-        :lives => 10
-                 })
+                                :answer => picked_word,
+                                :current => '_' * picked_word.length,
+                                :lives => 7
+                            })
     render(
         status: 200,
         json: {
@@ -18,10 +21,12 @@ class GamesController < ApplicationController
     )
   end
 
+  # Handler for POST to `/api/guess`, perform game state transition
   def guess
     letter = params[:letter]
     id = params[:id]
 
+    # Validate input parameters contains only single english letter
     unless check_guess?(letter) && !id.blank?
       render status: 400, json: {error: 'Expected guessing a single english character'}
       return
@@ -31,6 +36,8 @@ class GamesController < ApplicationController
     current = game[:current]
     answer = game[:answer]
     lives = game[:lives]
+
+    # Loop through the word and find matched letters
     matched = false
     current.each_char.with_index { |_, index|
       if current[index] == '_' && answer[index] == letter
@@ -39,11 +46,8 @@ class GamesController < ApplicationController
       end
     }
     lives -= 1 unless matched
-    state = if answer == current
-              'won'
-            else
-              lives > 0 ? 'alive' : 'lost'
-            end
+
+    state = if answer == current then 'won' else lives > 0 ? 'alive' : 'lost' end
     game.update(lives: lives, current: current)
     render(
         status: 200,
