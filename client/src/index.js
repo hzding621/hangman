@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './GameContainer';
+import GameContainer from './GameContainer';
 import './semantic-ui/semantic.min.css';
 
 ReactDOM.render(
-    <App />,
+    <GameContainer />,
     document.getElementById('root')
 );

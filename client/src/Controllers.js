@@ -1,4 +1,3 @@
-
 function newGame() {
   return fetch(`/api/new`, {
     accept: 'application/json'

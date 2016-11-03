@@ -4,7 +4,7 @@ import css from './Game.css' // eslint-disable-line
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { input: ''};
+        this.state = { input: '' };
 
         // Event handlers
         this.onInputChange = this.onInputChange.bind(this);
@@ -18,7 +18,7 @@ class Game extends React.Component {
 
     // Bind text input value to React state
     onInputChange(event) {
-        this.setState({input: event.target.value});
+        this.setState({ input: event.target.value });
     }
 
     // Event handler for 'Guess' button
@@ -38,34 +38,36 @@ class Game extends React.Component {
             );
         }
         const {phrase, answer, state, lives} = this.props.game;
+        const {trials, message, onNewGame} = this.props;
+        const aliveView = (
+            <div>
+                <div>Status: {state}</div>
+                <div>Number of lives left: {lives}</div>
+                <div>Trials: {trials}</div>
+                <br />
+                <div>Enter one letter:</div>
+                <input type="text" value={this.state.input} onChange={this.onInputChange}/>
+                <input type="submit" value="guess" onClick={this.onSubmit}/>
+                <div className="red">{message}</div>
+            </div>
+        );
+        const finishedView = (
+            <div>
+                { state === 'won'
+                    ? <div>Congratulations! You found the answer</div>
+                    : <div>The answer is <span className="red">{answer}</span>. Try again...</div>
+                }
+                <br />
+                <button onClick={onNewGame}>New Game</button>
+            </div>
+        );
         return (
             <div className="body">
                 <h1>HangMan</h1>
                 <h2 className="phrase">{phrase}</h2>
-                {
-                    state === 'alive'
-                    ? <div>
-                        <div>Status: {state}</div>
-                        <div>Number of lives left: {lives} </div>
-                        <div>Trials: {this.props.trials}</div>
-                        <br />
-                        <div>Enter one letter:</div>
-                        <input type="text" value={this.state.input} onChange={this.onInputChange}/>
-                        <input type="submit" value="guess" onClick={this.onSubmit}/>
-                        <div className="red">{this.props.message}</div>
-                    </div>
-                    : <div>
-                        {
-                            state === 'won'
-                            ? <div>Congratulations! You found the answer</div>
-                            : <div>The answer is <span className="red">{answer}</span>. Try again...</div>
-                        }
-                        <br />
-                        <button onClick={this.props.onNewGame}>New Game</button>
-                    </div>
-                }
+                {state === 'alive' ? aliveView : finishedView}
             </div>
-        )
+        );
     }
 }
 
