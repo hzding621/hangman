@@ -3,11 +3,11 @@ class GamesController < ApplicationController
   # Create a new game and return metadata
   def new
     # Randomly pick one word from dictionary
-    picked_word = Word.order("RANDOM()").limit(1)[0][:value]
+    picked_word = Word.order('RANDOM()').limit(1)[0][:value]
     new_game = Game.create!({
                                 :answer => picked_word,
                                 :current => '_' * picked_word.length,
-                                :lives => 7
+                                :lives => 6
                             })
     render(
         status: 200,
