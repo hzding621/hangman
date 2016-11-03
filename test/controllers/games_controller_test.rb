@@ -7,7 +7,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get '/api/new'
     response = JSON.parse(@response.body)
 
-    assert response['lives'] == 10
+    assert response['lives'] == 7
     assert response['answer'].length == response['phrase'].length
     assert response['state'] == 'alive'
   end

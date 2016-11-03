@@ -68,6 +68,7 @@ class GamesController < ApplicationController
   end
 
   private
+  # Validate guess is a single English letter
   def check_guess?(guess)
     guess = guess.downcase
     guess.length == 1 && !!guess.match(/^[[:alpha:]]+$/)
