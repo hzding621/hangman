@@ -60,10 +60,7 @@ class GamesController < ApplicationController
         :lives => lives,
         :state => state
     }
-    unless state == 'alive'
-      # does not return answer unless game is lost
-      response_data[:answer] = answer
-    end
+    response_data[:answer] = answer unless state == 'alive'
     render status: 200, json: response_data
   end
 
