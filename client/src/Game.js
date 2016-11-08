@@ -37,7 +37,7 @@ class Game extends React.Component {
                 </div>
             );
         }
-        const {phrase, answer, state, lives} = this.props.game;
+        const {phrase, answer, state, lives, id} = this.props.game;
         const {trials, message, onNewGame} = this.props;
         const aliveView = (
             <div>
@@ -66,6 +66,9 @@ class Game extends React.Component {
                 <h1>HangMan</h1>
                 <h2 className="phrase">{phrase}</h2>
                 {state === 'alive' ? aliveView : finishedView}
+                <br />
+                <div>Share this game</div>
+                <input value={`localhost:3000/view/${id}`}/>
             </div>
         );
     }

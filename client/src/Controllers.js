@@ -1,5 +1,12 @@
 function newGame() {
-  return fetch(`/api/new`, {
+  return fetch("/api/newGame", {
+    accept: 'application/json'
+  }).then(checkStatus)
+    .then(parseJSON);
+}
+
+function viewGame(id) {
+  return fetch(`/api/viewGame?id=${id}`, {
     accept: 'application/json'
   }).then(checkStatus)
     .then(parseJSON);
@@ -34,5 +41,5 @@ function parseJSON(response) {
   return response.json();
 }
 
-const Controllers = { newGame, guess };
+const Controllers = { newGame, viewGame, guess };
 export default Controllers;

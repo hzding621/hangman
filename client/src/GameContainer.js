@@ -50,13 +50,16 @@ class GameContainer extends Component {
 
     render() {
         return (
-            <Game
-                game={this.state.game}
-                trials={this.state.trials}
-                message={this.state.message}
-                submitGuess={this.submitGuess}
-                onNewGame={this.onNewGame}
-            />
+            <div>
+                <Game
+                    game={this.state.game}
+                    trials={this.state.trials}
+                    message={this.state.message}
+                    submitGuess={this.submitGuess}
+                    onNewGame={this.onNewGame}
+                />
+                {/*<GameViewer pollData={() => console.log("sync.")}/>*/}
+            </div>
         );
     }
 }

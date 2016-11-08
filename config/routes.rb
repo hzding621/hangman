@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
-  get '/api/new' => 'games#new'
+  get '/api/newGame' => 'games#new'
+  get '/api/viewGame' => 'games#view'
   post '/api/guess' => 'games#guess'
 end

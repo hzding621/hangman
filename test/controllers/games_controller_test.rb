@@ -4,7 +4,7 @@ require 'json'
 class GamesControllerTest < ActionDispatch::IntegrationTest
 
   test 'create new game get expected result' do
-    get '/api/new'
+    get '/api/newGame'
     response = JSON.parse(@response.body)
 
     assert response['lives'] == 6

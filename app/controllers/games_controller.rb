@@ -20,6 +20,29 @@ class GamesController < ApplicationController
     )
   end
 
+  # Get the status of any game
+  def view
+    id = params[:id]
+    if id.blank?
+      render status: 400, json: {error: 'Game id is missing in the query parameters!'}
+      return
+    end
+
+    game = Game.find(id)
+    current = game[:current]
+    answer = game[:answer]
+    lives = game[:lives]
+    state = state_of(answer, current, lives)
+    response_data = {
+        :id => id,
+        :phrase => current,
+        :lives => lives,
+        :state => state
+    }
+    response_data[:answer] = answer unless state == 'alive'
+    render status: 200, json: response_data
+  end
+
   # Handler for POST to `/api/guess`, perform game state transition
   def guess
     letter = params[:letter]
@@ -52,7 +75,7 @@ class GamesController < ApplicationController
     }
     lives -= 1 unless matched
 
-    state = if answer == current then 'won' else lives > 0 ? 'alive' : 'lost' end
+    state = state_of(answer, current, lives)
     game.update(lives: lives, current: current)
     response_data = {
         :id => id,
@@ -69,5 +92,11 @@ class GamesController < ApplicationController
   def check_guess?(guess)
     guess = guess.downcase
     guess.length == 1 && !!guess.match(/^[[:alpha:]]+$/)
+  end
+
+  private
+  # Compute the state string based on answer, current and number of lives left
+  def state_of(answer, current, lives)
+    if answer == current then 'won' else lives > 0 ? 'alive' : 'lost' end
   end
 end
