@@ -93,13 +93,12 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     game = Game.create!({
                             :answer => 'test',
                             :current => '____',
-                            :lives => 10
+                            :lives => 10,
+                            :view_key => 'abcdefgh'
                         })
-    id = game[:id]
-    get '/api/viewGame', params: {id: id}
+    get '/api/viewGame', params: {id: 'abcdefgh'}
     response = JSON.parse(@response.body)
 
-    assert_equal id, Integer(response['id'])
     assert_equal '____', response['phrase']
     assert_equal 10, Integer(response['lives'])
     assert_equal 'alive', response['state']
@@ -109,10 +108,11 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     game = Game.create!({
                             :answer => 'test',
                             :current => 'test',
-                            :lives => 6
+                            :lives => 6,
+                            :view_key => 'abcdefgh'
                         })
     id = game[:id]
-    get '/api/viewGame', params: {id: id}
+    get '/api/viewGame', params: {id: 'abcdefgh'}
     response = JSON.parse(@response.body)
 
     assert_equal id, Integer(response['id'])
@@ -121,5 +121,17 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     # A finished should contain answer
     assert_equal 'test', response['answer']
+  end
+
+  test 'view game with invalid or missing id' do
+    get '/api/viewGame', params: {id: 'notfound'}
+    response = JSON.parse(@response.body)
+
+    assert response.key?('error')
+
+    get '/api/viewGame'
+    response = JSON.parse(@response.body)
+
+    assert response.key?('error')
   end
 end
