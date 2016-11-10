@@ -1,4 +1,5 @@
 import React from 'react';
+import Statistics from './component/Statistics';
 import css from './Game.css' // eslint-disable-line
 
 class Game extends React.Component {
@@ -40,35 +41,25 @@ class Game extends React.Component {
         }
         const {phrase, answer, state, lives, view_key} = this.props.game;
         const {trials, message, onNewGame} = this.props;
-        const aliveView = (
-            <div>
-                <div>Status: {state}</div>
-                <div>Number of lives left: {lives}</div>
-                <div>Trials: {trials}</div>
-                <br />
-                <div>Enter one letter:</div>
-                <input type="text" value={this.state.input} onChange={this.onInputChange}/>
-                <input type="submit" value="guess" onClick={this.onSubmit}/>
-                <div className="red">{message}</div>
-            </div>
-        );
-        const finishedView = (
-            <div>
-                { state === 'won'
-                    ? <div>Congratulations! You found the answer</div>
-                    : <div>The answer is <span className="red">{answer}</span>. Try again...</div>
-                }
-                <br />
-                <button onClick={onNewGame}>New Game</button>
-            </div>
-        );
-        const pictureUrl = `/fig/${10 - lives}.png`;
+
+        // Interaction section contains button users can click
+        const interactionSection = state === 'alive'
+            ? (
+                <div>
+                    <div>Enter one letter:</div>
+                    <input type="text" value={this.state.input} onChange={this.onInputChange}/>
+                    <input type="submit" value="guess" onClick={this.onSubmit}/>
+                    <div className="red">{message}</div>
+                </div>)
+            : <div><button onClick={onNewGame}>New Game</button></div>;
+
         return (
             <div className="body">
                 <h1>HangMan</h1>
-                <div><img src={pictureUrl} role="presentation" /></div>
+                <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div>
                 <h2 className="phrase">{phrase}</h2>
-                {state === 'alive' ? aliveView : finishedView}
+                <Statistics answer={answer} state={state} lives={lives} trials={trials}/>
+                {interactionSection}
                 <br />
                 <div>Share this game</div>
                 <input className="shareLink" value={`localhost:3000/view/${view_key}`} readOnly/>

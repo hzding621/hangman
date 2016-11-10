@@ -1,4 +1,5 @@
 import React from 'react';
+import Statistics from './component/Statistics';
 import css from './Game.css' // eslint-disable-line
 
 const REFRESH_INTERVAL = 1000;
@@ -24,29 +25,13 @@ class GameView extends React.Component {
             );
         }
         const {phrase, answer, state, lives} = this.props.game;
-        const {trials, message} = this.props;
-        const aliveView = (
-            <div>
-                <div>Status: {state}</div>
-                <div>Number of lives left: {lives}</div>
-                {trials ? <div>Trials: {trials}</div> : <div></div>}
-            </div>
-        );
-        const finishedView = (
-            <div>
-                { state === 'won'
-                    ? <div>Congratulations! You found the answer</div>
-                    : <div>The answer is <span className="red">{answer}</span>. Try again...</div>
-                }
-            </div>
-        );
-        const pictureUrl = `/fig/${10 - lives}.png`;
+        const {message} = this.props;
         return (
             <div className="body">
                 <h1>HangMan</h1>
-                <div><img src={pictureUrl} role="presentation" /></div>
+                <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div>
                 <h2 className="phrase">{phrase}</h2>
-                {state === 'alive' ? aliveView : finishedView}
+                <Statistics answer={answer} state={state} lives={lives}/>
                 <div className="red">{message}</div>
             </div>
         );
