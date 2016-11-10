@@ -28,7 +28,13 @@ class GamesController < ApplicationController
       return
     end
 
-    game = Game.find(id)
+    begin
+      game = Game.find(id)
+    rescue ActiveRecord::RecordNotFound
+      render status: 400, json: {error: 'Game id is not valid!'}
+      return
+    end
+
     current = game[:current]
     answer = game[:answer]
     lives = game[:lives]
