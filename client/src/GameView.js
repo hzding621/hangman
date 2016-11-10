@@ -40,9 +40,11 @@ class GameView extends React.Component {
                 }
             </div>
         );
+        const pictureUrl = `/fig/${10 - lives}.png`;
         return (
             <div className="body">
                 <h1>HangMan</h1>
+                <div><img src={pictureUrl} role="presentation" /></div>
                 <h2 className="phrase">{phrase}</h2>
                 {state === 'alive' ? aliveView : finishedView}
                 <div className="red">{message}</div>

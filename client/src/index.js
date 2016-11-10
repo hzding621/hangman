@@ -11,8 +11,10 @@ ReactDOM.render(
 );
 
 ReactDOM.render((
-    <Router history={browserHistory}>
-        <Route path="/" component={GameContainer}/>
-        <Route path="/view/:id" component={GameViewContainer}/>
-    </Router>
+    <div>
+        <Router history={browserHistory}>
+            <Route path="/" component={GameContainer}/>
+            <Route path="/view/:id" component={GameViewContainer}/>
+        </Router>
+    </div>
 ), document.getElementById('root'));

@@ -33,6 +33,7 @@ class Game extends React.Component {
             return (
                 <div className="body">
                     <h1>HangMan</h1>
+                    <div><img src="/fig/4.png" role="presentation"/></div>
                     <button onClick={this.props.onNewGame}>New Game</button>
                 </div>
             );
@@ -61,14 +62,16 @@ class Game extends React.Component {
                 <button onClick={onNewGame}>New Game</button>
             </div>
         );
+        const pictureUrl = `/fig/${10 - lives}.png`;
         return (
             <div className="body">
                 <h1>HangMan</h1>
+                <div><img src={pictureUrl} role="presentation" /></div>
                 <h2 className="phrase">{phrase}</h2>
                 {state === 'alive' ? aliveView : finishedView}
                 <br />
                 <div>Share this game</div>
-                <input className="shareLink" value={`localhost:3000/view/${id}`}/>
+                <input className="shareLink" value={`localhost:3000/view/${id}`} readOnly/>
             </div>
         );
     }
