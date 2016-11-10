@@ -68,7 +68,7 @@ class Game extends React.Component {
                 {state === 'alive' ? aliveView : finishedView}
                 <br />
                 <div>Share this game</div>
-                <input value={`localhost:3000/view/${id}`}/>
+                <input className="shareLink" value={`localhost:3000/view/${id}`}/>
             </div>
         );
     }

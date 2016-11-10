@@ -58,7 +58,6 @@ class GameContainer extends Component {
                     submitGuess={this.submitGuess}
                     onNewGame={this.onNewGame}
                 />
-                {/*<GameViewer pollData={() => console.log("sync.")}/>*/}
             </div>
         );
     }
