@@ -9,7 +9,7 @@ class GameViewContainer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { game: null };
+        this.state = {};
         this.pollData = this.pollData.bind(this);
     }
 
@@ -17,11 +17,14 @@ class GameViewContainer extends React.Component {
         Controllers.viewGame(this.props.params.id)
             .then((game) => {
                 this.setState({game});
+            })
+            .catch((error) => {
+                this.setState({ message: "This game does not exists!" })
             });
     }
 
     render() {
-        return <GameView game={this.state.game} pollData={this.pollData}/>;
+        return <GameView game={this.state.game} message={this.state.message} pollData={this.pollData}/>;
     }
 }
 

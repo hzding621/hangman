@@ -19,11 +19,12 @@ class GameView extends React.Component {
             return (
                 <div className="body">
                     <h1>HangMan</h1>
+                    <div className="red">{this.props.message}</div>
                 </div>
             );
         }
         const {phrase, answer, state, lives} = this.props.game;
-        const {trials} = this.props;
+        const {trials, message} = this.props;
         const aliveView = (
             <div>
                 <div>Status: {state}</div>
@@ -44,6 +45,7 @@ class GameView extends React.Component {
                 <h1>HangMan</h1>
                 <h2 className="phrase">{phrase}</h2>
                 {state === 'alive' ? aliveView : finishedView}
+                <div className="red">{message}</div>
             </div>
         );
     }
@@ -53,7 +55,8 @@ class GameView extends React.Component {
 GameView.PropTypes = {
     game: React.PropTypes.object,
     trials: React.PropTypes.arrayOf(React.PropTypes.string),
-    pollData: React.PropTypes.func
+    message: React.PropTypes.string,
+    pollData: React.PropTypes.func.isRequired
 };
 
 export default GameView;

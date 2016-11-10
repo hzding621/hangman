@@ -78,8 +78,8 @@ class Game extends React.Component {
 Game.PropTypes = {
     game: React.PropTypes.object,
     trials: React.PropTypes.arrayOf(React.PropTypes.string),
-    submitGuess: React.PropTypes.func,
-    onNewGame: React.PropTypes.func,
+    submitGuess: React.PropTypes.func.isRequired,
+    onNewGame: React.PropTypes.func.isRequired,
     message: React.PropTypes.string
 };
 
