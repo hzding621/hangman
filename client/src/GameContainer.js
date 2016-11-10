@@ -50,15 +50,13 @@ class GameContainer extends Component {
 
     render() {
         return (
-            <div>
-                <Game
-                    game={this.state.game}
-                    trials={this.state.trials}
-                    message={this.state.message}
-                    submitGuess={this.submitGuess}
-                    onNewGame={this.onNewGame}
-                />
-            </div>
+            <Game
+                game={this.state.game}
+                trials={this.state.trials}
+                message={this.state.message}
+                submitGuess={this.submitGuess}
+                onNewGame={this.onNewGame}
+            />
         );
     }
 }

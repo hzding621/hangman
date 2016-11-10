@@ -40,7 +40,6 @@ class GamesController < ApplicationController
       return
     end
 
-
     id = game[:id]
     current = game[:current]
     answer = game[:answer]
