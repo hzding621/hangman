@@ -88,4 +88,38 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
     assert response.key?('error')
   end
+
+  test 'view an ongoing game' do
+    game = Game.create!({
+                            :answer => 'test',
+                            :current => '____',
+                            :lives => 10
+                        })
+    id = game[:id]
+    get '/api/viewGame', params: {id: id}
+    response = JSON.parse(@response.body)
+
+    assert_equal id, Integer(response['id'])
+    assert_equal '____', response['phrase']
+    assert_equal 10, Integer(response['lives'])
+    assert_equal 'alive', response['state']
+  end
+
+  test 'view a finished game' do
+    game = Game.create!({
+                            :answer => 'test',
+                            :current => 'test',
+                            :lives => 6
+                        })
+    id = game[:id]
+    get '/api/viewGame', params: {id: id}
+    response = JSON.parse(@response.body)
+
+    assert_equal id, Integer(response['id'])
+    assert_equal 'test', response['phrase']
+    assert_equal 'won', response['state']
+
+    # A finished should contain answer
+    assert_equal 'test', response['answer']
+  end
 end
