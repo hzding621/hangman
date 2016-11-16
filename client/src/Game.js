@@ -1,6 +1,5 @@
 import React from 'react';
 import Statistics from './component/Statistics';
-import NewGameButton from './component/NewGameButton';
 import Social from './component/Social';
 import Header from './component/Header';
 import css from './Game.css' // eslint-disable-line

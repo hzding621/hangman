@@ -27,12 +27,12 @@ class GamesController < ApplicationController
     word = params[:word]
     lives = params[:lives]
     if word.blank? or lives.blank?
-      render status: 400, json: {error: 'The answer to the game is missing.'}
+      render status: 400, json: {error: 'Input parameters are missing.'}
       return
     end
 
-    unless is_valid_phrase? word
-      render status: 400, json: {error: 'The supplied answer is invalid'}
+    unless is_valid_input? word, lives
+      render status: 400, json: {error: 'The custom inputs is invalid'}
       return
     end
 
@@ -175,7 +175,7 @@ class GamesController < ApplicationController
 
   private
   # Validate user supplied phrase is valid
-  def is_valid_phrase?(word)
-     !/[^a-z]/.match(word)
+  def is_valid_input?(word, lives)
+     !/[^a-z]/.match(word) && !/[^0-9]/.match(lives)
   end
 end
