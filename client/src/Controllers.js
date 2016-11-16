@@ -19,11 +19,22 @@ function guess(key, letter) {
       'Content-Type': 'application/json'
     },
     method: "POST",
-      body: JSON.stringify({ key, letter })
+    body: JSON.stringify({ key, letter })
   }).then(checkStatus)
     .then(parseJSON);
 }
 
+function custom(word, lives) {
+  return fetch("/api/custom", {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: "POST",
+    body: JSON.stringify({ word, lives})
+  }).then(checkStatus)
+    .then(parseJSON);
+}
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -40,5 +51,5 @@ function parseJSON(response) {
   return response.json();
 }
 
-const Controllers = { newGame, viewGame, guess };
+const Controllers = { newGame, viewGame, guess, custom };
 export default Controllers;

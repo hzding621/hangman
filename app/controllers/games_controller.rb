@@ -22,6 +22,38 @@ class GamesController < ApplicationController
     )
   end
 
+  # Create a new game with custom word and number of starting lives
+  def custom
+    word = params[:word]
+    lives = params[:lives]
+    if word.blank? or lives.blank?
+      render status: 400, json: {error: 'The answer to the game is missing.'}
+      return
+    end
+
+    unless is_valid_phrase? word
+      render status: 400, json: {error: 'The supplied answer is invalid'}
+      return
+    end
+
+    key = generate_unused_string
+    new_game = Game.create!({
+                              :key => key,
+                              :answer => word,
+                              :current => '_' * word.length,
+                              :lives => Integer(lives)
+                            })
+    render(
+        status: 200,
+        json: {
+            :key => key,
+            :phrase => new_game[:current],
+            :lives => lives,
+            :state => 'alive'
+        }
+    )
+  end
+
   # Get the status of any game
   def view
 
@@ -139,5 +171,11 @@ class GamesController < ApplicationController
       key = generate_random_string 8
     end
     key
+  end
+
+  private
+  # Validate user supplied phrase is valid
+  def is_valid_phrase?(word)
+     !/[^a-z]/.match(word)
   end
 end

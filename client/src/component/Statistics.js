@@ -15,7 +15,7 @@ const Text = ({answer, state, lives, trials}) => {
                 </div>
             );
         case 'won':
-            return <div>Congratulations! You found the answer</div>;
+            return <div>Congratulations!</div>;
         case 'lost':
             return <div>The answer is <span className="red">{answer}</span>. Try again...</div>;
         default:

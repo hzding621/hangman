@@ -1,6 +1,7 @@
 import React from 'react';
 import Statistics from './component/Statistics';
 import Header from './component/Header';
+import Social from './component/Social';
 import css from './Game.css' // eslint-disable-line
 
 const REFRESH_INTERVAL = 1000;
@@ -24,6 +25,8 @@ class GameView extends React.Component {
                 <div><img src={picUrl} role="presentation" /></div>
                 <Statistics game={game}/>
                 <div className="red">{message}</div>
+                <br />
+                {game ? <Social id={game.key}/> : <div />}
             </div>
         );
     }

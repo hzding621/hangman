@@ -35,11 +35,11 @@ class GameContainer extends Component {
     submitGuess(key, letter) {
         if (!GameContainer.validateGuess(letter)) {
             this.setState({ message: 'Please type in exactly one English letter..' });
-            return;
+            return false;
         }
         if (this.state.trials.includes(letter)) {
             this.setState({ message: `Already tried letter ${letter}` });
-            return;
+            return false;
         }
         Controllers.guess(key, letter)
             .then((responseJson) => {
@@ -47,6 +47,7 @@ class GameContainer extends Component {
                 trials.push(letter);
                 this.setState({ trials, game: responseJson, message: "" });
             });
+        return true;
     }
 
     // Validate the input contains exactly one english letter

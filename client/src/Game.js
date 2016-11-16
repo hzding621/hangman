@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import Statistics from './component/Statistics';
 import NewGameButton from './component/NewGameButton';
 import Social from './component/Social';
@@ -41,7 +40,9 @@ class Game extends React.Component {
     // Event handler for 'Guess' button
     onSubmit() {
         const {key} = this.props.game;
-        this.props.submitGuess(key, this.state.input);
+        if (this.props.submitGuess(key, this.state.input)) {
+            this.setState({ input: '' });
+        }
     }
 
     render() {
@@ -67,7 +68,7 @@ class Game extends React.Component {
                     <input type="submit" value="guess" onClick={this.onSubmit}/>
                     <div className="red">{message}</div>
                 </div>)
-            : <NewGameButton/>;
+            : <div />
 
         return (
             <div className="body">
