@@ -21,9 +21,7 @@ class GameView extends React.Component {
             <div className="body">
                 <h1>HangMan</h1>
                 <div><img src={picUrl} role="presentation" /></div>
-                {this.props.game
-                    ? <Statistics game={game}/>
-                    : <div></div>}
+                <Statistics game={game}/>
                 <div className="red">{message}</div>
             </div>
         );

@@ -1,6 +1,7 @@
 import React from 'react';
 import Statistics from './component/Statistics';
 import NewGameButton from './component/NewGameButton';
+import Social from './component/Social';
 import css from './Game.css' // eslint-disable-line
 
 const REFRESH_INTERVAL = 1000;
@@ -73,11 +74,7 @@ class Game extends React.Component {
                 <Statistics game={game} trials={trials}/>
                 {interactionSection}
                 <br /><br />
-                <div>Play together</div>
-                <input className="shareLink" value={`localhost:3000/play/${key}`} readOnly/>
-                <br /><br />
-                <div>Watch me play</div>
-                <input className="shareLink" value={`localhost:3000/view/${key}`} readOnly/>
+                <Social key={key}/>
             </div>
         );
     }
