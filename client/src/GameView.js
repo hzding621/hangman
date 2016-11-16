@@ -15,23 +15,15 @@ class GameView extends React.Component {
     }
 
     render() {
-        if (!this.props.game) {
-            // When the game is not initialized, only show the New Game button
-            return (
-                <div className="body">
-                    <h1>HangMan</h1>
-                    <div className="red">{this.props.message}</div>
-                </div>
-            );
-        }
-        const {phrase, answer, state, lives} = this.props.game;
-        const {message} = this.props;
+        const {message, game} = this.props;
+        const picUrl = game ? `/fig/${10 - game.lives}.png` : "/fig/4.png";
         return (
             <div className="body">
                 <h1>HangMan</h1>
-                <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div>
-                <h2 className="phrase">{phrase}</h2>
-                <Statistics answer={answer} state={state} lives={lives}/>
+                <div><img src={picUrl} role="presentation" /></div>
+                {this.props.game
+                    ? <Statistics game={game}/>
+                    : <div></div>}
                 <div className="red">{message}</div>
             </div>
         );

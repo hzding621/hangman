@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router'
+import HomePage from './HomePage';
 import GameContainer from './GameContainer';
 import GameViewContainer from './GameViewContainer';
 import './semantic-ui/semantic.min.css';
@@ -13,8 +14,9 @@ ReactDOM.render(
 ReactDOM.render((
     <div>
         <Router history={browserHistory}>
-            <Route path="/" component={GameContainer}/>
-            <Route path="/view/:id" component={GameViewContainer}/>
+            <Route path="/" component={HomePage}/>
+            <Route path="/play/:key" component={GameContainer} />
+            <Route path="/view/:key" component={GameViewContainer}/>
         </Router>
     </div>
 ), document.getElementById('root'));

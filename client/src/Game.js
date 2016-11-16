@@ -1,6 +1,9 @@
 import React from 'react';
 import Statistics from './component/Statistics';
+import NewGameButton from './component/NewGameButton';
 import css from './Game.css' // eslint-disable-line
+
+const REFRESH_INTERVAL = 1000;
 
 class Game extends React.Component {
     constructor(props) {
@@ -12,9 +15,19 @@ class Game extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentDidMount() {
+        this.interval = setInterval(this.props.pollData, REFRESH_INTERVAL);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     // Clear text input upon view update
     componentWillReceiveProps(nextProps) {
-        this.setState({ input: '' })
+        if (nextProps.game && this.props.game && nextProps.game.key !== this.props.game.key ) {
+            this.setState({ input: '' })
+        }
     }
 
     // Bind text input value to React state
@@ -24,8 +37,8 @@ class Game extends React.Component {
 
     // Event handler for 'Guess' button
     onSubmit() {
-        const {id} = this.props.game;
-        this.props.submitGuess(id, this.state.input);
+        const {key} = this.props.game;
+        this.props.submitGuess(key, this.state.input);
     }
 
     render() {
@@ -35,12 +48,12 @@ class Game extends React.Component {
                 <div className="body">
                     <h1>HangMan</h1>
                     <div><img src="/fig/4.png" role="presentation"/></div>
-                    <button onClick={this.props.onNewGame}>New Game</button>
+                    <div className="red">{this.props.message}</div>
                 </div>
             );
         }
-        const {phrase, answer, state, lives, view_key} = this.props.game;
-        const {trials, message, onNewGame} = this.props;
+        const {game, trials, message} = this.props;
+        const {state, lives, key} = game;
 
         // Interaction section contains button users can click
         const interactionSection = state === 'alive'
@@ -51,18 +64,20 @@ class Game extends React.Component {
                     <input type="submit" value="guess" onClick={this.onSubmit}/>
                     <div className="red">{message}</div>
                 </div>)
-            : <div><button onClick={onNewGame}>New Game</button></div>;
+            : <NewGameButton/>;
 
         return (
             <div className="body">
                 <h1>HangMan</h1>
                 <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div>
-                <h2 className="phrase">{phrase}</h2>
-                <Statistics answer={answer} state={state} lives={lives} trials={trials}/>
+                <Statistics game={game} trials={trials}/>
                 {interactionSection}
-                <br />
-                <div>Share this game</div>
-                <input className="shareLink" value={`localhost:3000/view/${view_key}`} readOnly/>
+                <br /><br />
+                <div>Play together</div>
+                <input className="shareLink" value={`localhost:3000/play/${key}`} readOnly/>
+                <br /><br />
+                <div>Watch me play</div>
+                <input className="shareLink" value={`localhost:3000/view/${key}`} readOnly/>
             </div>
         );
     }
@@ -72,8 +87,8 @@ class Game extends React.Component {
 Game.PropTypes = {
     game: React.PropTypes.object,
     trials: React.PropTypes.arrayOf(React.PropTypes.string),
+    pollData: React.PropTypes.func.isRequired,
     submitGuess: React.PropTypes.func.isRequired,
-    onNewGame: React.PropTypes.func.isRequired,
     message: React.PropTypes.string
 };
 

@@ -3,7 +3,8 @@ import css from '../Game.css' // eslint-disable-line
 
 // Middle portion of the page that shows game information
 // Shared by both Game and GameView
-export default ({answer, state, lives, trials}) => {
+const Text = ({answer, state, lives, trials}) => {
+
     switch(state) {
         case 'alive':
             return (
@@ -20,4 +21,21 @@ export default ({answer, state, lives, trials}) => {
         default:
             return <div />
     }
+};
+
+export default ({game, trials}) => {
+    if (!game) {
+        return <div />;
+    }
+    const {phrase, answer, state, lives} = game;
+    return (
+        <div>
+            <h2 className="phrase">{phrase}</h2>
+            <Text answer={answer}
+                  state={state}
+                  lives={lives}
+                  trials={trials}
+            />
+        </div>
+    )
 }

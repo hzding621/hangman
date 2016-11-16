@@ -14,14 +14,21 @@ class GameContainer extends Component {
         };
 
         // Event handlers
-        this.onNewGame = this.onNewGame.bind(this);
         this.submitGuess = this.submitGuess.bind(this);
+        this.pollData = this.pollData.bind(this);
     }
 
-    onNewGame() {
-        Controllers.newGame()
-            .then((responseJson) => {
-                this.setState({ game: responseJson, trials: [] });
+    componentWillReceiveProps(nextProps) {
+        this.setState({trials: []});
+    }
+
+    pollData() {
+        Controllers.viewGame(this.props.params.key)
+            .then((game) => {
+                this.setState({game});
+            })
+            .catch((error) => {
+                this.setState({ message: "This game is not available." })
             });
     }
 
@@ -55,7 +62,7 @@ class GameContainer extends Component {
                 trials={this.state.trials}
                 message={this.state.message}
                 submitGuess={this.submitGuess}
-                onNewGame={this.onNewGame}
+                pollData={this.pollData}
             />
         );
     }

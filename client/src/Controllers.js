@@ -5,21 +5,21 @@ function newGame() {
     .then(parseJSON);
 }
 
-function viewGame(id) {
-  return fetch(`/api/viewGame?id=${id}`, {
+function viewGame(key) {
+  return fetch(`/api/viewGame?key=${key}`, {
     accept: 'application/json'
   }).then(checkStatus)
     .then(parseJSON);
 }
 
-function guess(id, letter) {
+function guess(key, letter) {
   return fetch("/api/guess", {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     method: "POST",
-      body: JSON.stringify({ id, letter })
+      body: JSON.stringify({ key, letter })
   }).then(checkStatus)
     .then(parseJSON);
 }

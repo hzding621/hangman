@@ -14,17 +14,19 @@ class GameViewContainer extends React.Component {
     }
 
     pollData() {
-        Controllers.viewGame(this.props.params.id)
+        Controllers.viewGame(this.props.params.key)
             .then((game) => {
                 this.setState({game});
             })
             .catch((error) => {
-                this.setState({ message: "This game does not exists!" })
+                this.setState({ message: "This game is not available." })
             });
     }
 
     render() {
-        return <GameView game={this.state.game} message={this.state.message} pollData={this.pollData}/>;
+        return <GameView game={this.state.game}
+                         message={this.state.message}
+                         pollData={this.pollData}/>;
     }
 }
 
