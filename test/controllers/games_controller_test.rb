@@ -3,6 +3,10 @@ require 'json'
 
 class GamesControllerTest < ActionDispatch::IntegrationTest
 
+  def setup
+    @test_key = 'WjJqGalg'
+  end
+
   test 'create new game get expected result' do
     get '/api/newGame'
     response = JSON.parse(@response.body)
@@ -12,14 +16,14 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'correct guess should show correct letters' do
-    new_game = Game.create!({
-                                :answer => 'test',
-                                :current => '____',
-                                :lives => 10
-                            })
+    Game.create!({
+                     :answer => 'test',
+                     :current => '____',
+                     :lives => 10,
+                     :key => @test_key
+                 })
 
-    id = new_game[:id]
-    post '/api/guess', params: {letter: 't', id: id}
+    post '/api/guess', params: {letter: 't', key: @test_key}
     response = JSON.parse(@response.body)
 
     assert response['phrase'] == 't__t'
@@ -28,14 +32,14 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'wrong guess should decrement lives' do
-    game = Game.create!({
-                            :answer => 'test',
-                            :current => '____',
-                            :lives => 10
-                        })
+    Game.create!({
+                     :answer => 'test',
+                     :current => '____',
+                     :lives => 10,
+                     :key => @test_key
+                 })
 
-    id = game[:id]
-    post '/api/guess', params: {letter: 'a', id: id}
+    post '/api/guess', params: {letter: 'a', key: @test_key}
     response = JSON.parse(@response.body)
 
     assert response['phrase'] == '____'
@@ -44,14 +48,14 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'last life wrong guess should set game state to lost' do
-    game = Game.create!({
-                            :answer => 'test',
-                            :current => '____',
-                            :lives => 1
-                        })
+    Game.create!({
+                     :answer => 'test',
+                     :current => '____',
+                     :lives => 1,
+                     :key => @test_key
+                 })
 
-    id = game[:id]
-    post '/api/guess', params: {letter: 'a', id: id}
+    post '/api/guess', params: {letter: 'a', key: @test_key}
     response = JSON.parse(@response.body)
 
     assert response['phrase'] == '____'
@@ -60,14 +64,14 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'correctly guess all letter should set game state to won' do
-    game = Game.create!({
-                            :answer => 'test',
-                            :current => 'te_t',
-                            :lives => 6
-                        })
+    Game.create!({
+                     :answer => 'test',
+                     :current => 'te_t',
+                     :lives => 6,
+                     :key => @test_key
+                 })
 
-    id = game[:id]
-    post '/api/guess', params: {letter: 's', id: id}
+    post '/api/guess', params: {letter: 's', key: @test_key}
     response = JSON.parse(@response.body)
 
     assert response['phrase'] == 'test'
@@ -76,27 +80,27 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'when new request send to finished game return error' do
-    game = Game.create!({
-                            :answer => 'test',
-                            :current => '____',
-                            :lives => 0
-                        })
+    Game.create!({
+                     :answer => 'test',
+                     :current => '____',
+                     :lives => 0,
+                     :key => @test_key
+                 })
 
-    id = game[:id]
-    post '/api/guess', params: {letter: 'a', id: id}
+    post '/api/guess', params: {letter: 'a', key: @test_key}
     response = JSON.parse(@response.body)
 
     assert response.key?('error')
   end
 
   test 'view an ongoing game' do
-    game = Game.create!({
-                            :answer => 'test',
-                            :current => '____',
-                            :lives => 10,
-                            :view_key => 'abcdefgh'
-                        })
-    get '/api/viewGame', params: {id: 'abcdefgh'}
+    Game.create!({
+                     :answer => 'test',
+                     :current => '____',
+                     :lives => 10,
+                     :key => @test_key
+                 })
+    get '/api/viewGame', params: {key: @test_key}
     response = JSON.parse(@response.body)
 
     assert_equal '____', response['phrase']
@@ -105,17 +109,15 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'view a finished game' do
-    game = Game.create!({
-                            :answer => 'test',
-                            :current => 'test',
-                            :lives => 6,
-                            :view_key => 'abcdefgh'
-                        })
-    id = game[:id]
-    get '/api/viewGame', params: {id: 'abcdefgh'}
+    Game.create!({
+                     :answer => 'test',
+                     :current => 'test',
+                     :lives => 6,
+                     :key => @test_key
+                 })
+    get '/api/viewGame', params: {key: @test_key}
     response = JSON.parse(@response.body)
 
-    assert_equal id, Integer(response['id'])
     assert_equal 'test', response['phrase']
     assert_equal 'won', response['state']
 
@@ -123,8 +125,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'test', response['answer']
   end
 
-  test 'view game with invalid or missing id' do
-    get '/api/viewGame', params: {id: 'notfound'}
+  test 'view game with invalid or missing key' do
+    get '/api/viewGame', params: {key: 'notfound'}
     response = JSON.parse(@response.body)
 
     assert response.key?('error')
@@ -132,6 +134,36 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     get '/api/viewGame'
     response = JSON.parse(@response.body)
 
+    assert response.key?('error')
+  end
+
+  test 'create a cutsom game with valid parameters' do
+    post '/api/customGame', params: {word: 'react', lives: 2}
+    response = JSON.parse(@response.body)
+
+    assert_equal '_____', response['phrase']
+    assert_equal 2, Integer(response['lives'])
+    assert_equal 'alive', response['state']
+
+    key = response['key']
+
+    post '/api/guess', params: {key: key, letter: 'a'}
+    response = JSON.parse(@response.body)
+
+    assert_equal '__a__', response['phrase']
+  end
+
+  test 'create a custom with invalid parameters' do
+    post '/api/customGame', params: {word: 'abc', lives: -123}
+    response = JSON.parse(@response.body)
+    assert response.key?('error')
+
+    post '/api/customGame', params: {word: '123', lives: 2}
+    response = JSON.parse(@response.body)
+    assert response.key?('error')
+
+    post '/api/customGame', params: {}
+    response = JSON.parse(@response.body)
     assert response.key?('error')
   end
 end
