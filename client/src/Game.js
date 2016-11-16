@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Statistics from './component/Statistics';
 import NewGameButton from './component/NewGameButton';
 import Social from './component/Social';
+import Header from './component/Header';
 import css from './Game.css' // eslint-disable-line
 
 const REFRESH_INTERVAL = 1000;
@@ -47,7 +49,7 @@ class Game extends React.Component {
             // When the game is not initialized, only show the New Game button
             return (
                 <div className="body">
-                    <h1>HangMan</h1>
+                    <Header/>
                     <div><img src="/fig/4.png" role="presentation"/></div>
                     <div className="red">{this.props.message}</div>
                 </div>
@@ -69,12 +71,12 @@ class Game extends React.Component {
 
         return (
             <div className="body">
-                <h1>HangMan</h1>
+                <Header/>
                 <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div>
                 <Statistics game={game} trials={trials}/>
                 {interactionSection}
                 <br /><br />
-                <Social key={key}/>
+                <Social id={key}/>
             </div>
         );
     }

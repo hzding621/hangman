@@ -1,5 +1,6 @@
 import React from 'react';
 import Statistics from './component/Statistics';
+import Header from './component/Header';
 import css from './Game.css' // eslint-disable-line
 
 const REFRESH_INTERVAL = 1000;
@@ -19,7 +20,7 @@ class GameView extends React.Component {
         const picUrl = game ? `/fig/${10 - game.lives}.png` : "/fig/4.png";
         return (
             <div className="body">
-                <h1>HangMan</h1>
+                <Header/>
                 <div><img src={picUrl} role="presentation" /></div>
                 <Statistics game={game}/>
                 <div className="red">{message}</div>
