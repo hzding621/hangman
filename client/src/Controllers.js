@@ -25,7 +25,7 @@ function guess(key, letter) {
 }
 
 function custom(word, lives) {
-  return fetch("/api/custom", {
+  return fetch("/api/customGame", {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
