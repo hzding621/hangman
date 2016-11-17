@@ -176,6 +176,6 @@ class GamesController < ApplicationController
   private
   # Validate user supplied phrase is valid
   def is_valid_input?(word, lives)
-     !/[^a-z]/.match(word) && !/[^0-9]/.match(lives)
+     word.length > 0 && !/[^a-z]/.match(word) && lives > 0
   end
 end

@@ -67,7 +67,7 @@ class Game extends React.Component {
                     <input type="submit" value="guess" onClick={this.onSubmit}/>
                     <div className="red">{message}</div>
                 </div>)
-            : <div />
+            : <div />;
 
         return (
             <div className="body">

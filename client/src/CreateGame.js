@@ -9,7 +9,8 @@ class CreateGame extends React.Component {
 
         this.state = {
             wordInput: '',
-            livesInput: ''
+            livesInput: '',
+            message: ''
         };
 
         // Event handlers
@@ -20,14 +21,17 @@ class CreateGame extends React.Component {
 
     // Bind text input value to React state
     onWordInputChange(event) {
-        this.setState({ wordInput: event.target.value });
+        this.setState({ wordInput: event.target.value, message: '' });
     }
     onLivesInputChange(event) {
-        this.setState({ livesInput: event.target.value });
+        this.setState({ livesInput: event.target.value, message: '' });
     }
 
     onSubmit() {
         if (!CreateGame.validate(this.state.wordInput, this.state.livesInput)) {
+            this.setState({
+                message: 'Rule: (1) the word must contain only lowercase letters (2) life must be a positive number.'
+            });
             return;
         }
         Controllers.custom(this.state.wordInput, parseInt(this.state.livesInput, 10))
@@ -39,7 +43,7 @@ class CreateGame extends React.Component {
 
     static validate(word, lives) {
         // check word contains only english lowercase characters, and lives is a positive integer
-        return !/[^a-z]/.test(word) && !/[^0-9]/.test(lives);
+        return word.length > 0 && lives.length > 0 && !/[^a-z]/.test(word) && !/[^0-9]/.test(lives);
     }
 
     render() {
@@ -50,10 +54,12 @@ class CreateGame extends React.Component {
                 <div>
                     <div>Answer</div>
                     <input onChange={this.onWordInputChange}/>
-                    <div>Lives</div>
+                    <div>Life</div>
                     <input onChange={this.onLivesInputChange}/>
                     <br/>
                     <button onClick={this.onSubmit}>Create</button>
+                    <br />
+                    <div className="red">{this.state.message}</div>
                 </div>
             </div>
         )
