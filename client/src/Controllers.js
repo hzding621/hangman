@@ -12,6 +12,13 @@ function viewGame(key) {
     .then(parseJSON);
 }
 
+function viewGameByViewKey(key) {
+  return fetch(`/api/viewGame?view_key=${key}`, {
+    accept: 'application/json'
+  }).then(checkStatus)
+      .then(parseJSON);
+}
+
 function guess(key, letter) {
   return fetch("/api/guess", {
     headers: {
@@ -51,5 +58,5 @@ function parseJSON(response) {
   return response.json();
 }
 
-const Controllers = { newGame, viewGame, guess, custom };
+const Controllers = { newGame, viewGame, viewGameByViewKey, guess, custom };
 export default Controllers;

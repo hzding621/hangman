@@ -14,7 +14,7 @@ class GameViewContainer extends React.Component {
     }
 
     pollData() {
-        Controllers.viewGame(this.props.params.key)
+        Controllers.viewGameByViewKey(this.props.params.key)
             .then((game) => {
                 this.setState({game});
             })

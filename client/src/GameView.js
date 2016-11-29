@@ -26,7 +26,7 @@ class GameView extends React.Component {
                 <Statistics game={game}/>
                 <div className="red">{message}</div>
                 <br />
-                {game ? <Social id={game.key}/> : <div />}
+                {game ? <Social viewId={game.view_key}/> : <div />}
             </div>
         );
     }

@@ -5,6 +5,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @test_key = 'WjJqGalg'
+    @test_view_key = 'AkhqFjlJ'
   end
 
   test 'create new game get expected result' do
@@ -20,7 +21,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
                      :answer => 'test',
                      :current => '____',
                      :lives => 10,
-                     :key => @test_key
+                     :key => @test_key,
+                     :view_key => @test_view_key
                  })
 
     post '/api/guess', params: {letter: 't', key: @test_key}
@@ -36,7 +38,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
                      :answer => 'test',
                      :current => '____',
                      :lives => 10,
-                     :key => @test_key
+                     :key => @test_key,
+                     :view_key => @test_view_key
                  })
 
     post '/api/guess', params: {letter: 'a', key: @test_key}
@@ -52,7 +55,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
                      :answer => 'test',
                      :current => '____',
                      :lives => 1,
-                     :key => @test_key
+                     :key => @test_key,
+                     :view_key => @test_view_key
                  })
 
     post '/api/guess', params: {letter: 'a', key: @test_key}
@@ -68,7 +72,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
                      :answer => 'test',
                      :current => 'te_t',
                      :lives => 6,
-                     :key => @test_key
+                     :key => @test_key,
+                     :view_key => @test_view_key
                  })
 
     post '/api/guess', params: {letter: 's', key: @test_key}
@@ -84,7 +89,8 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
                      :answer => 'test',
                      :current => '____',
                      :lives => 0,
-                     :key => @test_key
+                     :key => @test_key,
+                     :view_key => @test_view_key
                  })
 
     post '/api/guess', params: {letter: 'a', key: @test_key}
@@ -93,14 +99,31 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
     assert response.key?('error')
   end
 
-  test 'view an ongoing game' do
+  test 'view an ongoing game as a player' do
     Game.create!({
                      :answer => 'test',
                      :current => '____',
                      :lives => 10,
-                     :key => @test_key
+                     :key => @test_key,
+                     :view_key => @test_view_key
                  })
     get '/api/viewGame', params: {key: @test_key}
+    response = JSON.parse(@response.body)
+
+    assert_equal '____', response['phrase']
+    assert_equal 10, Integer(response['lives'])
+    assert_equal 'alive', response['state']
+  end
+
+  test 'view an ongoing game as a watcher' do
+    Game.create!({
+                     :answer => 'test',
+                     :current => '____',
+                     :lives => 10,
+                     :key => @test_key,
+                     :view_key => @test_view_key
+                 })
+    get '/api/viewGame', params: {view_key: @test_view_key}
     response = JSON.parse(@response.body)
 
     assert_equal '____', response['phrase']
@@ -113,9 +136,19 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
                      :answer => 'test',
                      :current => 'test',
                      :lives => 6,
-                     :key => @test_key
+                     :key => @test_key,
+                     :view_key => @test_view_key
                  })
     get '/api/viewGame', params: {key: @test_key}
+    response = JSON.parse(@response.body)
+
+    assert_equal 'test', response['phrase']
+    assert_equal 'won', response['state']
+
+    # A finished should contain answer
+    assert_equal 'test', response['answer']
+
+    get '/api/viewGame', params: {view_key: @test_view_key}
     response = JSON.parse(@response.body)
 
     assert_equal 'test', response['phrase']

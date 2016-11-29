@@ -4,9 +4,11 @@ class GamesController < ApplicationController
   def new
     # Randomly pick one word from dictionary
     picked_word = Word.order('RANDOM()').limit(1)[0][:value]
-    key = generate_unused_string
+    key = generate_unused_key
+    view_key = generate_unused_view_key
     new_game = Game.create!({
                                 :key => key,
+                                :view_key => view_key,
                                 :answer => picked_word,
                                 :current => '_' * picked_word.length,
                                 :lives => 6,
@@ -15,6 +17,7 @@ class GamesController < ApplicationController
         status: 200,
         json: {
             :key => key,
+            :view_key => view_key,
             :phrase => new_game[:current],
             :lives => new_game[:lives],
             :state => 'alive',
@@ -36,9 +39,11 @@ class GamesController < ApplicationController
       return
     end
 
-    key = generate_unused_string
+    key = generate_unused_key
+    view_key = generate_unused_view_key
     new_game = Game.create!({
                               :key => key,
+                              :view_key => view_key,
                               :answer => word,
                               :current => '_' * word.length,
                               :lives => Integer(lives),
@@ -47,6 +52,7 @@ class GamesController < ApplicationController
         status: 200,
         json: {
             :key => key,
+            :view_key => view_key,
             :phrase => new_game[:current],
             :lives => lives,
             :state => 'alive',
@@ -60,13 +66,14 @@ class GamesController < ApplicationController
 
     # Handle missing key
     key = params[:key]
-    if key.blank?
+    view_key = params[:view_key]
+    if key.blank? and view_key.blank?
       render status: 400, json: {error: 'Game key is missing in the query parameters!'}
       return
     end
 
     # Handle invalid game key
-    game = Game.find_by key: key
+    game = key.blank? ? (Game.find_by view_key: view_key) : (Game.find_by key: key)
     unless game
       render status: 400, json: {error: 'Game key is invalid!'}
       return
@@ -77,12 +84,13 @@ class GamesController < ApplicationController
     lives = game[:lives]
     state = state_of(answer, current, lives)
     response_data = {
-        :key => key,
+        :view_key => game[:view_key],
         :phrase => current,
         :lives => lives,
         :state => state,
-        :trials => game[:trials]
+        :trials => game[:trials],
     }
+    response_data[:key] = key unless key.blank?
     response_data[:answer] = answer unless state == 'alive'
     render status: 200, json: response_data
   end
@@ -169,10 +177,20 @@ class GamesController < ApplicationController
   end
 
   private
-  # Repeatedly generate a random string until an unused is found
-  def generate_unused_string
+  # Repeatedly generate a random key until an unused is found
+  def generate_unused_key
     key = generate_random_string 8
     while Game.find_by key:  key
+      key = generate_random_string 8
+    end
+    key
+  end
+
+  private
+  # Repeatedly generate a random view_key until an unused is found
+  def generate_unused_view_key
+    key = generate_random_string 8
+    while Game.find_by view_key:  key
       key = generate_random_string 8
     end
     key

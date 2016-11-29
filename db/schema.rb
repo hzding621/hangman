@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129034822) do
+ActiveRecord::Schema.define(version: 20161129035322) do
 
   create_table "games", force: :cascade do |t|
     t.string   "answer"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20161129034822) do
     t.integer  "lives"
     t.string   "key"
     t.string   "trials",     default: ""
+    t.string   "view_key"
   end
 
   create_table "words", force: :cascade do |t|

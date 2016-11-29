@@ -56,7 +56,7 @@ class Game extends React.Component {
             );
         }
         const {game, message} = this.props;
-        const {state, lives, key} = game;
+        const {state, lives, key, view_key} = game;
 
         // Interaction section contains button users can click
         const interactionSection = state === 'alive'
@@ -76,7 +76,7 @@ class Game extends React.Component {
                 <Statistics game={game}/>
                 {interactionSection}
                 <br /><br />
-                <Social id={key}/>
+                <Social id={key} viewId={view_key}/>
             </div>
         );
     }
