@@ -23,11 +23,11 @@ const Text = ({answer, state, lives, trials}) => {
     }
 };
 
-export default ({game, trials}) => {
+export default ({game}) => {
     if (!game) {
         return <div />;
     }
-    const {phrase, answer, state, lives} = game;
+    const {phrase, answer, state, lives, trials} = game;
     return (
         <div>
             <h2 className="phrase">{phrase}</h2>

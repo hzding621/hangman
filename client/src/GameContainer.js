@@ -9,17 +9,12 @@ class GameContainer extends Component {
 
         this.state = {
             game: null, // contains game progress metadata
-            trials: [], // stores the previously guessed letters in this game
             message: "" // alert message
         };
 
         // Event handlers
         this.submitGuess = this.submitGuess.bind(this);
         this.pollData = this.pollData.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({trials: []});
     }
 
     pollData() {
@@ -37,15 +32,13 @@ class GameContainer extends Component {
             this.setState({ message: 'Please type in exactly one English letter..' });
             return false;
         }
-        if (this.state.trials.includes(letter)) {
+        if (this.state.game.trials.indexOf(letter) > -1) {
             this.setState({ message: `Already tried letter ${letter}` });
             return false;
         }
         Controllers.guess(key, letter)
             .then((responseJson) => {
-                const trials = this.state.trials;
-                trials.push(letter);
-                this.setState({ trials, game: responseJson, message: "" });
+                this.setState({game: responseJson, message: "" });
             });
         return true;
     }
@@ -60,7 +53,6 @@ class GameContainer extends Component {
         return (
             <Game
                 game={this.state.game}
-                trials={this.state.trials}
                 message={this.state.message}
                 submitGuess={this.submitGuess}
                 pollData={this.pollData}

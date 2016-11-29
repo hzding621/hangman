@@ -9,7 +9,7 @@ class GamesController < ApplicationController
                                 :key => key,
                                 :answer => picked_word,
                                 :current => '_' * picked_word.length,
-                                :lives => 6
+                                :lives => 6,
                             })
     render(
         status: 200,
@@ -17,7 +17,7 @@ class GamesController < ApplicationController
             :key => key,
             :phrase => new_game[:current],
             :lives => new_game[:lives],
-            :state => 'alive'
+            :state => 'alive',
         }
     )
   end
@@ -41,7 +41,7 @@ class GamesController < ApplicationController
                               :key => key,
                               :answer => word,
                               :current => '_' * word.length,
-                              :lives => Integer(lives)
+                              :lives => Integer(lives),
                             })
     render(
         status: 200,
@@ -49,7 +49,8 @@ class GamesController < ApplicationController
             :key => key,
             :phrase => new_game[:current],
             :lives => lives,
-            :state => 'alive'
+            :state => 'alive',
+            :trials => ''
         }
     )
   end
@@ -79,7 +80,8 @@ class GamesController < ApplicationController
         :key => key,
         :phrase => current,
         :lives => lives,
-        :state => state
+        :state => state,
+        :trials => game[:trials]
     }
     response_data[:answer] = answer unless state == 'alive'
     render status: 200, json: response_data
@@ -112,6 +114,7 @@ class GamesController < ApplicationController
     current = game[:current] # partially guessed word
     answer = game[:answer]
     lives = game[:lives]
+    trials = game[:trials]
 
     # Safe check requesting to a finished game
     if lives == 0
@@ -129,13 +132,15 @@ class GamesController < ApplicationController
     }
     lives -= 1 unless matched
 
+    trials = trials + letter
     state = state_of(answer, current, lives)
-    game.update(lives: lives, current: current)
+    game.update(lives: lives, current: current, trials: trials)
     response_data = {
         :key => key,
         :phrase => current,
         :lives => lives,
-        :state => state
+        :state => state,
+        :trials => trials
     }
     response_data[:answer] = answer unless state == 'alive'
     render status: 200, json: response_data
@@ -176,6 +181,6 @@ class GamesController < ApplicationController
   private
   # Validate user supplied phrase is valid
   def is_valid_input?(word, lives)
-     word.length > 0 && !/[^a-z]/.match(word) && lives > 0
+     word.length > 0 && !/[^a-z]/.match(word) && Integer(lives) > 0
   end
 end

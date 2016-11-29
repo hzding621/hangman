@@ -55,7 +55,7 @@ class Game extends React.Component {
                 </div>
             );
         }
-        const {game, trials, message} = this.props;
+        const {game, message} = this.props;
         const {state, lives, key} = game;
 
         // Interaction section contains button users can click
@@ -73,7 +73,7 @@ class Game extends React.Component {
             <div className="body">
                 <Header/>
                 <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div>
-                <Statistics game={game} trials={trials}/>
+                <Statistics game={game}/>
                 {interactionSection}
                 <br /><br />
                 <Social id={key}/>
@@ -85,7 +85,6 @@ class Game extends React.Component {
 // Provide type checks for props
 Game.PropTypes = {
     game: React.PropTypes.object,
-    trials: React.PropTypes.arrayOf(React.PropTypes.string),
     pollData: React.PropTypes.func.isRequired,
     submitGuess: React.PropTypes.func.isRequired,
     message: React.PropTypes.string
