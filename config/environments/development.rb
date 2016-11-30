@@ -44,4 +44,7 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Use default 2246 long English words for dictionary
+  config.dictionary_file_path = 'db/google-10000-english-usa-no-swears-long.txt'
 end
