@@ -14,6 +14,8 @@ class HintService
     puts "Dictionary successfully loaded #{@words.length} words in memory"
   end
 
+  # a pattern denotes the known and unknown letter in a word, e.g. 're__s__ion'
+  # This method returns all words in dictionary that matches the pattern
   def find_matched_word_with_pattern(pattern)
     matched_word = []
     @words.each do |w|
@@ -31,14 +33,16 @@ class HintService
     matched_word
   end
 
-  def filter_words_of_wrong_letters!(words, trials)
+  # This method removes words if it contains any of the wrong letters
+  def filter_words_of_wrong_letters!(words, wrong_letters)
     words.delete_if do |w|
-      trials.each_char.any? do |c|
+      wrong_letters.each_char.any? do |c|
         w.include? c
       end
     end
   end
 
+  # This method builds a map from letters to frequencies from the given list of words
   def build_frequency_tables(words)
     frequencies = {}
     words.each do |w|
@@ -49,11 +53,12 @@ class HintService
     frequencies
   end
 
-  def max_frequency_letter(frequency_table, trials)
+  # This method finds the most frequent letters not appearing in filtered_letters
+  def max_frequency_letter(frequency_table, filtered_letters)
     max_letter = 'a'
     max_frequency = 0
     frequency_table.each do |letter, frequency|
-      if trials.include? letter
+      if filtered_letters.include? letter
         next
       end
       if frequency > max_frequency
@@ -64,6 +69,7 @@ class HintService
     max_letter
   end
 
+  # The stub method that executes the frequency-based search policy
   def find_hint(pattern, trials)
     matched_word = find_matched_word_with_pattern pattern
     wrong_letters = trials.split('').delete_if do |c|
