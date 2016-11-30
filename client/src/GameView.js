@@ -18,11 +18,9 @@ class GameView extends React.Component {
 
     render() {
         const {message, game} = this.props;
-        const picUrl = game ? `/fig/${10 - game.lives}.png` : "/fig/4.png";
         return (
             <div className="body">
                 <Header/>
-                <div><img src={picUrl} role="presentation" /></div>
                 <Statistics game={game}/>
                 <div className="red">{message}</div>
                 <br />

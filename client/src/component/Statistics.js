@@ -28,8 +28,10 @@ export default ({game}) => {
         return <div />;
     }
     const {phrase, answer, state, lives, trials} = game;
+    const picture = lives <= 10 ? <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div> : <div />;
     return (
         <div>
+            {picture}
             <h2 className="phrase">{phrase}</h2>
             <Text answer={answer}
                   state={state}

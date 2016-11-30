@@ -37,7 +37,7 @@ class CreateGame extends React.Component {
         Controllers.custom(this.state.wordInput, parseInt(this.state.livesInput, 10))
             .then((jsonResponse) => {
                 const {key} = jsonResponse;
-                this.context.router.push(`/view/${key}`);
+                this.context.router.push(`/play/${key}`);
             });
     }
 

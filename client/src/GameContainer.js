@@ -47,7 +47,11 @@ class GameContainer extends Component {
     getHint(pattern, trials) {
         Controllers.hint(pattern, trials)
             .then(({hint}) => {
-                this.setState({message: `Maybe you should try letter "${hint}".`});
+                if (hint) {
+                    this.setState({message: `Maybe you should try letter "${hint}".`});
+                } else {
+                    this.setState({message: "The AI fails to recognize the word."});
+                }
             });
     }
 

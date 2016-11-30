@@ -55,7 +55,7 @@ class HintService
 
   # This method finds the most frequent letters not appearing in filtered_letters
   def max_frequency_letter(frequency_table, filtered_letters)
-    max_letter = 'a'
+    max_letter = ''
     max_frequency = 0
     frequency_table.each do |letter, frequency|
       if filtered_letters.include? letter
@@ -74,7 +74,7 @@ class HintService
     matched_word = find_matched_word_with_pattern pattern
     wrong_letters = trials.split('').delete_if do |c|
       pattern.include? c
-    end.join('')
+    end.join('') # wrong letters are those that previously tried but not matched
     matched_word = filter_words_of_wrong_letters! matched_word, wrong_letters
     max_frequency_letter (build_frequency_tables matched_word), trials
   end

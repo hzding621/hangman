@@ -81,7 +81,6 @@ class Game extends React.Component {
         return (
             <div className="body">
                 <Header/>
-                <div><img src={`/fig/${10 - lives}.png`} role="presentation" /></div>
                 <Statistics game={game}/>
                 {interactionSection}
                 <br /><br />
