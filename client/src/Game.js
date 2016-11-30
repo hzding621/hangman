@@ -14,6 +14,7 @@ class Game extends React.Component {
         // Event handlers
         this.onInputChange = this.onInputChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onGetHint = this.onGetHint.bind(this);
     }
 
     componentDidMount() {
@@ -44,6 +45,12 @@ class Game extends React.Component {
         }
     }
 
+    // Event handler for 'Get Hint' button
+    onGetHint() {
+        const {phrase, trials} = this.props.game;
+        this.props.getHint(phrase, trials);
+    }
+
     render() {
         if (!this.props.game) {
             // When the game is not initialized, only show the New Game button
@@ -65,6 +72,8 @@ class Game extends React.Component {
                     <div>Enter one letter:</div>
                     <input type="text" value={this.state.input} onChange={this.onInputChange}/>
                     <input type="submit" value="guess" onClick={this.onSubmit}/>
+                    <br />
+                    <input type="submit" value="hint" onClick={this.onGetHint}/>
                     <div className="red">{message}</div>
                 </div>)
             : <div />;
@@ -87,6 +96,7 @@ Game.PropTypes = {
     game: React.PropTypes.object,
     pollData: React.PropTypes.func.isRequired,
     submitGuess: React.PropTypes.func.isRequired,
+    getHint:React.PropTypes.func.isRequired,
     message: React.PropTypes.string
 };
 

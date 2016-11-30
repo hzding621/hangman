@@ -16,7 +16,7 @@ function viewGameByViewKey(key) {
   return fetch(`/api/viewGame?view_key=${key}`, {
     accept: 'application/json'
   }).then(checkStatus)
-      .then(parseJSON);
+    .then(parseJSON);
 }
 
 function guess(key, letter) {
@@ -43,6 +43,13 @@ function custom(word, lives) {
     .then(parseJSON);
 }
 
+function hint(pattern, trials) {
+  return fetch(`/api/hint?pattern=${pattern}&trials=${trials}`, {
+    accept: 'application/json'
+  }).then(checkStatus)
+    .then(parseJSON);
+}
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -58,5 +65,5 @@ function parseJSON(response) {
   return response.json();
 }
 
-const Controllers = { newGame, viewGame, viewGameByViewKey, guess, custom };
+const Controllers = { newGame, viewGame, viewGameByViewKey, guess, custom, hint };
 export default Controllers;

@@ -15,6 +15,7 @@ class GameContainer extends Component {
         // Event handlers
         this.submitGuess = this.submitGuess.bind(this);
         this.pollData = this.pollData.bind(this);
+        this.getHint = this.getHint.bind(this);
     }
 
     pollData() {
@@ -43,6 +44,13 @@ class GameContainer extends Component {
         return true;
     }
 
+    getHint(pattern, trials) {
+        Controllers.hint(pattern, trials)
+            .then(({hint}) => {
+                this.setState({message: `Maybe you should try letter "${hint}".`});
+            });
+    }
+
     // Validate the input contains exactly one english letter
     static validateGuess(letter) {
         letter = letter.toLowerCase();
@@ -56,6 +64,7 @@ class GameContainer extends Component {
                 message={this.state.message}
                 submitGuess={this.submitGuess}
                 pollData={this.pollData}
+                getHint={this.getHint}
             />
         );
     }

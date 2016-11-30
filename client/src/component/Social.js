@@ -12,8 +12,14 @@ export default ({id, viewId}) => {
                 : <div />
             }
             <br /><br />
-            <div>Ask your friend to watch</div>
-            <input className="shareLink" value={`localhost:3000/view/${viewId}`} readOnly/>
+            {
+                viewId
+                ? <div>
+                    <div>Ask your friend to watch</div>
+                    <input className="shareLink" value={`localhost:3000/view/${viewId}`} readOnly/>
+                </div>
+                : <div />
+            }
         </div>
     );
 }

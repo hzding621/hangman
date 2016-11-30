@@ -1,9 +1,5 @@
 class GamesController < ApplicationController
 
-  def initialize
-    @hint_service = HintService.instance
-  end
-
   # Create a new game and return metadata
   def new
     # Randomly pick one word from dictionary
